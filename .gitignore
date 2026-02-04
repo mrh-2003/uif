@@ -1,0 +1,66 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+ENV/
+
+# =========================
+# Streamlit
+# =========================
+.streamlit/secrets.toml
+.streamlit/config.toml
+
+# Cache de Streamlit
+.streamlit/cache/
+.streamlit/static/
+
+# =========================
+# Archivos de datos
+# =========================
+*.csv
+*.xlsx
+*.xls
+*.parquet
+*.feather
+
+# =========================
+# Logs y temporales
+# =========================
+*.log
+*.tmp
+*.temp
+
+# =========================
+# Jupyter / IDE
+# =========================
+.ipynb_checkpoints/
+.vscode/
+.idea/
+
+# =========================
+# Sistema operativo
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Build / distribución
+# =========================
+build/
+dist/
+*.egg-info/
+
+# =========================
+# Variables de entorno
+# =========================
+.env
+.env.*
