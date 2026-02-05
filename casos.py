@@ -118,3 +118,48 @@ def eliminar_persona_de_caso(caso_id, persona_id):
     with get_db() as db:
         query = text("DELETE FROM casos_personas WHERE caso_id = :caso_id AND persona_id = :persona_id")
         db.execute(query, {'caso_id': caso_id, 'persona_id': persona_id})
+
+def listar_busquedas_disponibles():
+    with get_db() as db:
+        query = text("""
+            SELECT DISTINCT busqueda, COUNT(*) as num_transacciones
+            FROM transacciones
+            WHERE busqueda IS NOT NULL
+            GROUP BY busqueda
+            ORDER BY num_transacciones DESC
+        """)
+        return [dict(row._mapping) for row in db.execute(query).fetchall()]
+
+def obtener_personas_por_busqueda(busqueda):
+    with get_db() as db:
+        query = text("""
+            SELECT DISTINCT p.persona_id, p.documento_encriptado, 
+                   p.tipo_persona, p.descripcion_ocupacion,
+                   COUNT(DISTINCT t.transaccion_id) as num_transacciones,
+                   SUM(t.monto) as monto_total
+            FROM transacciones t
+            LEFT JOIN personas p ON (
+                t.ordenante_id = p.persona_id OR 
+                t.beneficiario_id = p.persona_id OR
+                t.ejecutante_id = p.persona_id
+            )
+            WHERE t.busqueda = :busqueda
+                AND p.persona_id IS NOT NULL
+            GROUP BY p.persona_id
+            ORDER BY monto_total DESC
+        """)
+        return [dict(row._mapping) for row in db.execute(query, {'busqueda': busqueda}).fetchall()]
+
+def agregar_busqueda_a_caso(caso_id, busqueda, rol_principal='INVESTIGADO'):
+    personas = obtener_personas_por_busqueda(busqueda)
+    
+    contador = 0
+    for idx, persona in enumerate(personas):
+        rol = rol_principal if idx == 0 else 'RELACIONADO'
+        motivo = f"Asociado a búsqueda: {busqueda}"
+        
+        resultado = agregar_persona_a_caso(caso_id, persona['persona_id'], rol, motivo)
+        if resultado:
+            contador += 1
+    
+    return contador
