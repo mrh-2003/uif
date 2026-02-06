@@ -22,14 +22,14 @@ from reportes import (
 from grafo_viz import crear_grafo_interactivo
 
 st.set_page_config(
-    page_title="Sistema UIF - Análisis Financiero",
+    page_title="Sistema - Análisis Financiero",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 def sidebar_navigation():
     with st.sidebar:
-        st.title("🔍 Sistema UIF")
+        st.title("🔍 Sistema")
         st.markdown("---")
         
         if 'caso_actual' in st.session_state and st.session_state['caso_actual']:
@@ -72,7 +72,7 @@ def main():
         pagina_reportes()
 
 def pagina_inicio():
-    st.title("Sistema de Inteligencia Financiera - UIF")
+    st.title("Sistema de Inteligencia Financiera")
     
     col1, col2, col3 = st.columns(3)
     

@@ -1,4 +1,4 @@
-# Sistema de Inteligencia Financiera - UIF
+# Sistema de Inteligencia Financiera
 
 ## Instalación
 
